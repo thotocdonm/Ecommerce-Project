@@ -15,6 +15,7 @@ import { TransformInterceptor } from 'src/core/transform.interceptor';
       useClass: TransformInterceptor,
     },
   ],
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])]
+  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],
+  exports: [UsersService]
 })
 export class UsersModule { }

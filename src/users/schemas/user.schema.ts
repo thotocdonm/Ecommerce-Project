@@ -9,10 +9,16 @@ export class User {
     name: string
 
     @Prop()
+    password: string
+
+    @Prop()
     email: string
 
     @Prop()
     address: string
+
+    @Prop()
+    role: string
 
     @Prop()
     createdAt: Date
