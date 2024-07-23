@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
+import { IUser } from 'src/interface/user.interface';
 
 @Controller('users')
 export class UsersController {
@@ -10,8 +11,8 @@ export class UsersController {
 
   @Post()
   @ResponseMessage('Create a new user')
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  create(@Body() createUserDto: CreateUserDto, @User() user: IUser) {
+    return this.usersService.create(createUserDto, user);
   }
 
   @Get()
@@ -32,12 +33,12 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
+    return this.usersService.update(id, updateUserDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  remove(@Param('id') id: string, @User() user: IUser) {
+    return this.usersService.remove(id, user);
   }
 }
