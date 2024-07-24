@@ -54,27 +54,27 @@ export class UsersService {
     }
   }
 
-  async findAll(currentPage: number, pageSize: number, qs: string) {
+  async findAll(current: number, pageSize: number, qs: string) {
 
     const { filter, sort, projection, population } = aqp(qs);
 
-    delete filter.currentPage
+    delete filter.current
     delete filter.pageSize
 
     const defaultLimit = +pageSize ? +pageSize : 10
 
     const totalItems = await this.userModel.count({})
-    const skip = (currentPage - 1) * defaultLimit
+    const skip = (current - 1) * defaultLimit
     const totalPages = Math.ceil(totalItems / defaultLimit);
 
     return {
       meta: {
-        current: currentPage,
+        current: current,
         pageSize: pageSize,
         pages: totalPages,
         total: totalItems,
       },
-      result: await this.userModel.find(filter)
+      result: await this.userModel.find(filter, '-refreshToken')
         .skip(skip)
         .limit(defaultLimit)
         .sort(sort as any)

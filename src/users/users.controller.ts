@@ -19,11 +19,11 @@ export class UsersController {
   @Public()
   @ResponseMessage('Get users with paginate')
   findAll(
-    @Query('currentPage') currentPage,
+    @Query('current') current,
     @Query('pageSize') pageSize,
     @Query() qs,
   ) {
-    return this.usersService.findAll(+currentPage, +pageSize, qs);
+    return this.usersService.findAll(+current, +pageSize, qs);
   }
 
   @Get(':id')
