@@ -10,10 +10,6 @@ import { TransformInterceptor } from 'src/core/transform.interceptor';
   controllers: [UsersController],
   providers: [
     UsersService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TransformInterceptor,
-    },
   ],
   imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],
   exports: [UsersService]

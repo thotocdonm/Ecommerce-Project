@@ -23,7 +23,7 @@ export class UsersService {
       ({
         ...createUserDto,
         password: hashPassword,
-        role: "USER",
+        role: createUserDto.role ? createUserDto.role : "USER",
         createdBy: {
           _id: user._id,
           email: user.email
