@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsEmail, IsNotEmpty, ValidateNested, isArray, isNotEmpty } from "class-validator";
 
 export class CreateProductDto {
     @IsNotEmpty()
@@ -8,7 +9,9 @@ export class CreateProductDto {
     price: string
 
     @IsNotEmpty()
-    colors: string[]
+    @ValidateNested()
+    @Type(() => Color)
+    colors: Color[]
 
     @IsNotEmpty()
     size: string[]
@@ -21,4 +24,19 @@ export class CreateProductDto {
 
     @IsNotEmpty()
     style: string
+}
+
+export class Color {
+
+    @IsNotEmpty()
+    colorName: string
+
+    @IsNotEmpty()
+    colorCode: string
+
+    @IsNotEmpty()
+    @IsArray()
+    image: string[]
+
+
 }

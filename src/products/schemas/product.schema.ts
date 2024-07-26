@@ -26,8 +26,12 @@ export class Product {
         }
     }[]
 
-    @Prop()
-    colors: string[]
+    @Prop({ type: Object })
+    colors: {
+        "colorName": string
+        "colorCode": string,
+        "image": string[]
+    }
 
     @Prop()
     size: string[]

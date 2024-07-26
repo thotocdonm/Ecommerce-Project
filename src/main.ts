@@ -16,7 +16,9 @@ async function bootstrap() {
   const port = configService.get<string>('PORT');
   const reflector = app.get(Reflector);
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true
+  }));
   app.useGlobalInterceptors(new TransformInterceptor(reflector));
   app.useGlobalGuards(new JwtAuthGuard(reflector))
   app.useStaticAssets(join(__dirname, '..', 'public'));
