@@ -25,4 +25,10 @@ export class OrdersController {
     return this.ordersService.findAll(+current, +pageSize, qs);
   }
 
+  @Post(':id')
+  @ResponseMessage('Finish a order')
+  finishOrder(@Param('id') id: string, @User() user: IUser) {
+    return this.ordersService.finishOrder(id, user);
+  }
+
 }

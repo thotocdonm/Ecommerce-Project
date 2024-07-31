@@ -20,6 +20,10 @@ class OrderProduct {
 
 const OrderProductSchema = SchemaFactory.createForClass(OrderProduct);
 
+export enum status {
+    'Waiting for payment', 'DONE'
+}
+
 @Schema({ timestamps: true })
 export class Order {
     @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
@@ -37,6 +41,9 @@ export class Order {
     @Prop()
     price: number
 
+    @Prop({ type: String, enum: status })
+    status: string
+
     @Prop({ type: Object })
     detail: OrderProduct[];
 
@@ -45,6 +52,15 @@ export class Order {
 
     @Prop({ type: Object })
     createdBy: {
+        _id: string,
+        email: string
+    }
+
+    @Prop()
+    updatedAt: Date
+
+    @Prop({ type: Object })
+    updatedBy: {
         _id: string,
         email: string
     }
