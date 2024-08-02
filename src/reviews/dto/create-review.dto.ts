@@ -6,4 +6,8 @@ export class CreateReviewDto {
 
     @IsNotEmpty()
     rating: number
+
+
+    @IsNotEmpty()
+    product: string
 }

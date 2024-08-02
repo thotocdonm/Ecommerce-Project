@@ -46,8 +46,8 @@ export class OrdersService {
     await order.save();
 
     for (const product of order.detail) {
-      await this.productModel.findByIdAndUpdate(product.product, {
-        $inc: { sold: product.quantity }
+      await this.productModel.findByIdAndUpdate(product._id, {
+        $inc: { sold: product.quantity, quantity: -product.quantity },
       });
     }
 

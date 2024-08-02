@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument } from "mongoose";
+import { Document, Types, Schema as MongooseSchema } from 'mongoose';
 
 export type ReviewDocument = HydratedDocument<Review>;
 
@@ -10,6 +11,9 @@ export class Review {
 
     @Prop()
     content: string
+
+    @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Product' })
+    product: Types.ObjectId;
 
     @Prop()
     createdAt: Date

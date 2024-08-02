@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Header, Headers } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Header, Headers, Query } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
@@ -11,13 +11,18 @@ export class ReviewsController {
 
   @Post()
   @ResponseMessage('Create a new review')
-  create(@Body() createReviewDto: CreateReviewDto, @User() user: IUser, @Headers('productId') productId: string) {
-    return this.reviewsService.create(createReviewDto, user, productId);
+  create(@Body() createReviewDto: CreateReviewDto, @User() user: IUser) {
+    return this.reviewsService.create(createReviewDto, user);
   }
 
   @Get()
-  findAll() {
-    return this.reviewsService.findAll();
+  @ResponseMessage('Get reviews with paginate')
+  findAll(
+    @Query('current') current,
+    @Query('pageSize') pageSize,
+    @Query() qs,
+  ) {
+    return this.reviewsService.findAll(+current, +pageSize, qs);
   }
 
   @Get(':id')
@@ -33,7 +38,7 @@ export class ReviewsController {
 
   @Delete(':id')
   @ResponseMessage('Delete a review')
-  remove(@Param('id') id: string, @User() user: IUser, @Headers('productId') productId: string) {
-    return this.reviewsService.remove(id, user, productId);
+  remove(@Param('id') id: string, @User() user: IUser) {
+    return this.reviewsService.remove(id, user);
   }
 }

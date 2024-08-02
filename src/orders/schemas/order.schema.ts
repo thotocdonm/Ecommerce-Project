@@ -15,7 +15,7 @@ class OrderProduct {
     quantity: number;
 
     @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Product' })
-    product: Types.ObjectId;
+    _id: Types.ObjectId;
 }
 
 const OrderProductSchema = SchemaFactory.createForClass(OrderProduct);
