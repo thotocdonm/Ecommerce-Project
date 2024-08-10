@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Header, Headers
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
-import { ResponseMessage, User } from 'src/decorator/customize';
+import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from 'src/interface/user.interface';
 
 @Controller('reviews')
@@ -16,6 +16,7 @@ export class ReviewsController {
   }
 
   @Get()
+  @Public()
   @ResponseMessage('Get reviews with paginate')
   findAll(
     @Query('current') current,

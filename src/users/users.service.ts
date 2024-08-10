@@ -23,6 +23,7 @@ export class UsersService {
       ({
         ...createUserDto,
         password: hashPassword,
+        type: 'SYSTEM',
         role: createUserDto.role ? createUserDto.role : "USER",
         createdBy: {
           _id: user._id,
@@ -46,11 +47,31 @@ export class UsersService {
       ({
         ...createUserDto,
         password: hashPassword,
-        role: "USER"
+        role: "USER",
+        type: 'SYSTEM'
       })
     return {
       _id: res._id,
       createdAt: res.createdAt
+    }
+  }
+
+  async socialCreate(email: string, type: string) {
+    const password = Math.random().toString(36).slice(2, 10)
+    const salt = bcrypt.genSaltSync(10);
+    const hashPassword = bcrypt.hashSync(password, salt)
+    const res = await this.userModel.create
+      ({
+        email: email,
+        password: hashPassword,
+        role: "USER",
+        type: type
+      })
+    return {
+      _id: res._id as unknown as string,
+      email: res.email,
+      name: res.name,
+      role: res.role,
     }
   }
 

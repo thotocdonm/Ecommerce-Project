@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
@@ -16,6 +16,13 @@ export class AuthController {
     @Post('/login')
     async login(@Req() req, @Res({ passthrough: true }) response: Response) {
         return this.authService.login(req.user, response)
+    }
+
+    @Public()
+    @ResponseMessage('Login with social media')
+    @Post('/login-social')
+    async loginSocial(@Body() body, @Res({ passthrough: true }) response: Response) {
+        return this.authService.socialLogin(body.email, body.type, response)
     }
 
     @ResponseMessage('Get user account')

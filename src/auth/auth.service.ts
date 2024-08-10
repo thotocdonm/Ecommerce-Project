@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { IUser } from 'src/interface/user.interface';
+import { ILoginSocialMedia, IUser } from 'src/interface/user.interface';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
 import ms from 'ms';
@@ -59,6 +59,25 @@ export class AuthService {
 
         };
     }
+
+    async socialLogin(email: string, type: string, response: Response): Promise<any> {
+        // Check if user exists
+        let user = await this.usersService.findOneByEmail(email);
+
+        if (!user) {
+            // Create new user if not found
+            const res = await this.usersService.socialCreate(email, type)
+            return this.login(res, response)
+        }
+
+        const { _id, name, role, email: userEmail } = user
+
+        const userId = _id.toString();
+
+        // Reuse the existing login function
+        return this.login({ _id: userId, name, role, email: userEmail }, response);
+    }
+
 
     async createRefreshToken(payload) {
         return this.jwtService.sign(

@@ -15,7 +15,7 @@ export class Product {
     @Prop()
     price: number
 
-    @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Review' })
+    @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Review' })
     reviews: Types.ObjectId[]
 
     @Prop({ type: Object })

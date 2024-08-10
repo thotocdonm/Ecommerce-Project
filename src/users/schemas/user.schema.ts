@@ -21,6 +21,9 @@ export class User {
     role: string
 
     @Prop()
+    type: string
+
+    @Prop()
     refreshToken: string
 
     @Prop()
