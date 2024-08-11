@@ -38,6 +38,13 @@ export class AuthController {
         return this.authService.register(req.body)
     }
 
+    @Public()
+    @ResponseMessage('Verify email')
+    @Post('/verify')
+    async verify(@Body() body) {
+        return this.authService.verifyOTP(body.email, body.otp)
+    }
+
     @ResponseMessage('Get User by refresh token')
     @Public()
     @Get('/refresh')

@@ -7,10 +7,14 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import * as bcrypt from 'bcryptjs';
 import aqp from 'api-query-params';
 import { IUser } from 'src/interface/user.interface';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private readonly userModel: SoftDeleteModel<UserDocument>) { }
+  constructor(
+    @InjectModel(User.name) private readonly userModel: SoftDeleteModel<UserDocument>,
+    private readonly mailService: MailService,
+  ) { }
 
   async create(createUserDto: CreateUserDto, user: IUser) {
     const isExisted = await this.userModel.findOne({ email: createUserDto.email });
@@ -25,6 +29,7 @@ export class UsersService {
         password: hashPassword,
         type: 'SYSTEM',
         role: createUserDto.role ? createUserDto.role : "USER",
+        isVerify: true,
         createdBy: {
           _id: user._id,
           email: user.email
@@ -41,6 +46,8 @@ export class UsersService {
     if (isExisted) {
       throw new BadRequestException('This email is already existed')
     }
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expirationTime = Date.now() + 20 * 60 * 1000;
     const salt = bcrypt.genSaltSync(10);
     const hashPassword = bcrypt.hashSync(createUserDto.password, salt)
     const res = await this.userModel.create
@@ -48,13 +55,41 @@ export class UsersService {
         ...createUserDto,
         password: hashPassword,
         role: "USER",
-        type: 'SYSTEM'
+        type: 'SYSTEM',
+        isVerify: false,
+        verifyExpired: expirationTime,
+        verifyOTP: otp
       })
+    const sendMail = await this.mailService.sendVerifyOTP(otp, createUserDto.email)
+
     return {
       _id: res._id,
       createdAt: res.createdAt
     }
   }
+
+  async verifyOTP(email: string, otp: string) {
+    const user = await this.userModel.findOne({ email: email });
+    if (!user) {
+      throw new BadRequestException('This user is not existed')
+    }
+    if (Date.now() > user.verifyExpired) {
+      throw new BadRequestException('OTP has expired. Please request a new one')
+    }
+    if (otp !== user.verifyOTP) {
+      throw new BadRequestException('Invalid OTP')
+    }
+    const res = await this.userModel.updateOne({ email: email },
+      {
+        isVerify: true,
+        verifyExpired: null,
+        verifyOTP: null
+      }
+    )
+    return 'ok'
+  }
+
+
 
   async socialCreate(email: string, type: string) {
     const password = Math.random().toString(36).slice(2, 10)

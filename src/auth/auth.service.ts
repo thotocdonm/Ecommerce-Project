@@ -18,10 +18,13 @@ export class AuthService {
 
     async validateUser(email: string, pass: string): Promise<any> {
         const user = await this.usersService.findOneByEmail(email)
-        const isValidPassword = bcrypt.compareSync(pass, user.password);
-        if (user && isValidPassword) {
-            return user
+        if (user) {
+            const isValidPassword = bcrypt.compareSync(pass, user.password);
+            if (user && isValidPassword) {
+                return user
+            }
         }
+
         return null;
     }
 
@@ -140,6 +143,11 @@ export class AuthService {
 
     async register(createUserDto: CreateUserDto) {
         return this.usersService.register(createUserDto)
+
+    }
+
+    async verifyOTP(email: string, otp: string) {
+        return this.usersService.verifyOTP(email, otp)
 
     }
 

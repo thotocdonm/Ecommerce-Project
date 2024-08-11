@@ -27,6 +27,15 @@ export class User {
     refreshToken: string
 
     @Prop()
+    isVerify: boolean
+
+    @Prop()
+    verifyExpired: number
+
+    @Prop()
+    verifyOTP: string
+
+    @Prop()
     createdAt: Date
 
     @Prop()

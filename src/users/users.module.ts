@@ -5,13 +5,17 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from 'src/core/transform.interceptor';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   controllers: [UsersController],
   providers: [
     UsersService,
   ],
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MailModule
+  ],
   exports: [UsersService]
 })
 export class UsersModule { }
