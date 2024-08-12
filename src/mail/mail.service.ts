@@ -1,13 +1,19 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class MailService {
     constructor(
-        private readonly mailerService: MailerService
+        private readonly mailerService: MailerService,
+        @Inject(forwardRef(() => UsersService))
+        private usersService: UsersService
     ) { }
 
-    async sendVerifyOTP(otp: string, email: string) {
+    async sendVerifyOTP(otp: string, expirationTime: number, email: string) {
+        const res = this.usersService.resendOTP(otp, expirationTime, email)
+
+
         return await this.mailerService
             .sendMail({
                 to: email, // list of receivers

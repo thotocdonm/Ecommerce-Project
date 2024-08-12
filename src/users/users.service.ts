@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,6 +13,7 @@ import { MailService } from 'src/mail/mail.service';
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: SoftDeleteModel<UserDocument>,
+    @Inject(forwardRef(() => MailService))
     private readonly mailService: MailService,
   ) { }
 
@@ -57,10 +58,8 @@ export class UsersService {
         role: "USER",
         type: 'SYSTEM',
         isVerify: false,
-        verifyExpired: expirationTime,
-        verifyOTP: otp
       })
-    const sendMail = await this.mailService.sendVerifyOTP(otp, createUserDto.email)
+    const sendMail = await this.mailService.sendVerifyOTP(otp, expirationTime, createUserDto.email)
 
     return {
       _id: res._id,
@@ -178,5 +177,12 @@ export class UsersService {
 
   async findOneByToken(refreshToken: String) {
     return await this.userModel.findOne({ refreshToken })
+  }
+
+  async resendOTP(otp: string, expirationTime: number, email: string) {
+    return await this.userModel.updateOne({ email: email }, {
+      verifyExpired: expirationTime,
+      verifyOTP: otp
+    })
   }
 }

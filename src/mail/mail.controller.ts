@@ -14,15 +14,6 @@ export class MailController {
   @Public()
   @ResponseMessage('Test Email')
   async handleTestEmail() {
-    await this.mailerService
-      .sendMail({
-        to: 'minhsondiabla@gmail.com', // list of receivers
-        from: 'noreply@nestjs.com', // sender address
-        subject: 'Verify your email', // Subject line
-        template: 'OTP',
-        context: {
-          otp: 123456
-        } // HTML body content
-      })
+
   }
 }
