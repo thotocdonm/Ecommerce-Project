@@ -99,13 +99,15 @@ export class UsersService {
         email: email,
         password: hashPassword,
         role: "USER",
-        type: type
+        type: type,
+        isVerify: true
       })
     return {
       _id: res._id as unknown as string,
       email: res.email,
       name: res.name,
       role: res.role,
+      isVerify: res.isVerify
     }
   }
 

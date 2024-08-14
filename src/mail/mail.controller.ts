@@ -1,7 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { MailService } from './mail.service';
-import { Public, ResponseMessage } from 'src/decorator/customize';
+import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { MailerService } from '@nestjs-modules/mailer';
+import { IUser } from 'src/interface/user.interface';
 
 @Controller('mail')
 export class MailController {
@@ -11,9 +12,10 @@ export class MailController {
   ) { }
 
   @Get()
-  @Public()
-  @ResponseMessage('Test Email')
-  async handleTestEmail() {
-
+  @ResponseMessage('Resend verify OTP')
+  async handleResendOTP(@User() user: IUser) {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expirationTime = Date.now() + 20 * 60 * 1000;
+    return this.mailService.sendVerifyOTP(otp, expirationTime, user.email)
   }
 }

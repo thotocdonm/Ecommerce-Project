@@ -29,7 +29,7 @@ export class AuthService {
     }
 
     async login(user: IUser, response: Response) {
-        const { _id, name, email, role } = user;
+        const { _id, name, email, role, isVerify } = user;
         const payload = {
             sub: "token login",
             iss: "from server",
@@ -58,6 +58,7 @@ export class AuthService {
                 name,
                 email,
                 role,
+                isVerify
             },
 
         };
@@ -73,12 +74,12 @@ export class AuthService {
             return this.login(res, response)
         }
 
-        const { _id, name, role, email: userEmail } = user
+        const { _id, name, role, email: userEmail, isVerify } = user
 
         const userId = _id.toString();
 
         // Reuse the existing login function
-        return this.login({ _id: userId, name, role, email: userEmail }, response);
+        return this.login({ _id: userId, name, role, email: userEmail, isVerify }, response);
     }
 
 
