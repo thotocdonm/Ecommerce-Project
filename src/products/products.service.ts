@@ -38,7 +38,7 @@ export class ProductsService {
 
     const defaultLimit = +pageSize ? +pageSize : 10
 
-    const totalItems = await this.productModel.count({})
+    const totalItems = await this.productModel.countDocuments(filter)
     const skip = (current - 1) * defaultLimit
     const totalPages = Math.ceil(totalItems / defaultLimit);
 

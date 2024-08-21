@@ -131,7 +131,7 @@ export class UsersService {
         pages: totalPages,
         total: totalItems,
       },
-      result: await this.userModel.find(filter, '-refreshToken')
+      result: await this.userModel.find(filter, '-refreshToken -verifyExpired -verifyOTP')
         .skip(skip)
         .limit(defaultLimit)
         .sort(sort as any)
