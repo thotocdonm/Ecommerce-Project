@@ -29,8 +29,8 @@ export class ProductsController {
   @Get(':id')
   @Public()
   @ResponseMessage('Get product by id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(id);
+  findOne(@Param('id') id: string, @Query() qs) {
+    return this.productsService.findOne(id, qs);
   }
 
   @Patch(':id')

@@ -58,8 +58,9 @@ export class ProductsService {
     }
   }
 
-  async findOne(id: string) {
-    return await this.productModel.findOne({ _id: id })
+  async findOne(id: string, qs: string) {
+    const { filter, sort, projection, population } = aqp(qs);
+    return await this.productModel.findOne({ _id: id }).populate(population)
   }
 
   async update(id: string, updateProductDto: UpdateProductDto, user: IUser) {
