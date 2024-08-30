@@ -12,6 +12,12 @@ class OrderProduct {
     productName: string;
 
     @Prop()
+    size: string;
+
+    @Prop()
+    color: string;
+
+    @Prop()
     quantity: number;
 
     @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Product' })
@@ -43,6 +49,12 @@ export class Order {
 
     @Prop({ type: String, enum: status })
     status: string
+
+    @Prop()
+    paymentMethod: string
+
+    @Prop()
+    note: string
 
     @Prop({ type: Object })
     detail: OrderProduct[];
