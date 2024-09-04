@@ -11,7 +11,7 @@ import { FilesModule } from './files/files.module';
 import { OrdersModule } from './orders/orders.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { MailModule } from './mail/mail.module';
-import { VnpayModule } from './vnpay/vnpay.module';
+import { MomoModule } from './momo/momo.module';
 
 
 
@@ -37,7 +37,7 @@ import { VnpayModule } from './vnpay/vnpay.module';
     OrdersModule,
     ReviewsModule,
     MailModule,
-    VnpayModule,
+    MomoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

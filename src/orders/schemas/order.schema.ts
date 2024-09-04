@@ -54,6 +54,9 @@ export class Order {
     paymentMethod: string
 
     @Prop()
+    momoOrderId: string
+
+    @Prop()
     note: string
 
     @Prop({ type: Object })

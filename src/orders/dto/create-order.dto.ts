@@ -1,5 +1,5 @@
 import { Type } from "class-transformer"
-import { IsArray, IsNotEmpty, ValidateNested } from "class-validator"
+import { IsArray, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator"
 
 export class CreateOrderDto {
     @IsNotEmpty()
@@ -13,6 +13,15 @@ export class CreateOrderDto {
 
     @IsNotEmpty()
     price: number
+
+    @IsNotEmpty()
+    paymentMethod: string
+
+    @IsOptional()
+    momoOrderId: string
+
+    @IsOptional()
+    note: string
 
     @IsNotEmpty()
     @ValidateNested()
@@ -31,6 +40,12 @@ class DetailProduct {
 
     @IsNotEmpty()
     _id: string
+
+    @IsNotEmpty()
+    size: string;
+
+    @IsNotEmpty()
+    color: string;
 
 
 }

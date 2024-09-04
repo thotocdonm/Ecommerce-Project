@@ -15,7 +15,7 @@ export class OrdersService {
     @InjectModel(Product.name) private readonly productModel: SoftDeleteModel<ProductDocument>
   ) { }
   async create(createOrderDto: CreateOrderDto, user: IUser) {
-
+    console.log(createOrderDto);
 
     let res = await this.orderModel.create({
       ...createOrderDto,
