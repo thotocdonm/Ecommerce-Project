@@ -21,6 +21,9 @@ export class User {
     role: string
 
     @Prop()
+    phone: string
+
+    @Prop()
     type: string
 
     @Prop()

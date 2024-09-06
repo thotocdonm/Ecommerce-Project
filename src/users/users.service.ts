@@ -107,7 +107,9 @@ export class UsersService {
       email: res.email,
       name: res.name,
       role: res.role,
-      isVerify: res.isVerify
+      isVerify: res.isVerify,
+      address: "",
+      phone: ""
     }
   }
 
@@ -145,14 +147,17 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto, user: IUser) {
-    return await this.userModel.updateOne({ _id: id },
+    return await this.userModel.findOneAndUpdate({ _id: id },
       {
-        ...updateUserDto,
-        updatedBy: {
-          _id: user._id,
-          email: user.email
-        }
-      }
+        $set: {
+          ...updateUserDto, // Update existing values or add new ones from updateUserDto
+          updatedBy: {
+            _id: user._id,
+            email: user.email
+          }
+        },
+      },
+      { upsert: true }
     )
   }
 
