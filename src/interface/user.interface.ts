@@ -5,7 +5,8 @@ export interface IUser {
     address: string,
     phone: string,
     role: string,
-    isVerify: boolean
+    isVerify: boolean,
+    type: string
 }
 
 export interface ILoginSocialMedia {

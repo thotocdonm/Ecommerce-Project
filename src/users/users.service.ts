@@ -109,7 +109,8 @@ export class UsersService {
       role: res.role,
       isVerify: res.isVerify,
       address: "",
-      phone: ""
+      phone: "",
+      type: res.type
     }
   }
 
@@ -191,5 +192,21 @@ export class UsersService {
       verifyExpired: expirationTime,
       verifyOTP: otp
     })
+  }
+
+  async changePassword(user: IUser, password: string, newPassword: string) {
+    let res = await this.userModel.findOne({ _id: user._id });
+    const isValidPassword = bcrypt.compareSync(password, res.password);
+    if (isValidPassword) {
+      const salt = bcrypt.genSaltSync(10);
+      const hashPassword = bcrypt.hashSync(newPassword, salt)
+      let res1 = await this.userModel.updateOne({ _id: user._id }, {
+        password: hashPassword
+      })
+      return res1
+    }
+    else {
+      throw new BadRequestException('Password không đúng!')
+    }
   }
 }
