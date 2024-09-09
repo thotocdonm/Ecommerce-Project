@@ -3,6 +3,7 @@ import { MailService } from './mail.service';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { MailerService } from '@nestjs-modules/mailer';
 import { IUser } from 'src/interface/user.interface';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Controller('mail')
 export class MailController {
@@ -18,4 +19,13 @@ export class MailController {
     const expirationTime = Date.now() + 20 * 60 * 1000;
     return this.mailService.sendVerifyOTP(otp, expirationTime, user.email)
   }
+
+  @Get('subscriber')
+  @Public()
+  @ResponseMessage('Send email to Subscribers')
+  async handleSendEmailToSubscribers() {
+    return this.mailService.sendEmailToSubscriber()
+  }
+
+
 }

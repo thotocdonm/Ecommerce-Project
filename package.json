@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.3.2",
     "@nestjs/config": "^3.2.3",
@@ -29,6 +30,7 @@
     "@nestjs/mongoose": "^10.0.10",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.3.2",
+    "@nestjs/schedule": "^4.1.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/mongoose-delete": "^1.0.6",
     "api-query-params": "^5.4.0",

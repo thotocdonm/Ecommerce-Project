@@ -12,6 +12,7 @@ import { OrdersModule } from './orders/orders.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { MailModule } from './mail/mail.module';
 import { MomoModule } from './momo/momo.module';
+import { SubscribersModule } from './subscribers/subscribers.module';
 
 
 
@@ -38,6 +39,7 @@ import { MomoModule } from './momo/momo.module';
     ReviewsModule,
     MailModule,
     MomoModule,
+    SubscribersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

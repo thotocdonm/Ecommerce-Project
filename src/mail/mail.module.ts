@@ -5,6 +5,9 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { UsersModule } from 'src/users/users.module';
+import { SubscribersModule } from 'src/subscribers/subscribers.module';
+import { ProductsModule } from 'src/products/products.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 
 @Module({
@@ -12,6 +15,9 @@ import { UsersModule } from 'src/users/users.module';
   providers: [MailService],
   exports: [MailService],
   imports: [
+    ScheduleModule.forRoot(),
+    SubscribersModule,
+    ProductsModule,
     forwardRef(() => UsersModule),
     MailerModule.forRootAsync({
       imports: [ConfigModule],
@@ -27,11 +33,13 @@ import { UsersModule } from 'src/users/users.module';
         defaults: {
           from: '"No Reply" <no-reply@localhost>',
         },
+        preview: true,
         template: {
           dir: __dirname + '/templates',
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
+
           },
         },
       }),
