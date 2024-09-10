@@ -22,6 +22,7 @@ export class MailController {
 
   @Get('subscriber')
   @Public()
+  @Cron(CronExpression.EVERY_WEEKEND)
   @ResponseMessage('Send email to Subscribers')
   async handleSendEmailToSubscribers() {
     return this.mailService.sendEmailToSubscriber()

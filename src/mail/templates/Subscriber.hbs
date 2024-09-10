@@ -5,33 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       .product-container {
-        display: flex;
-        flex-direction: column;
         width: 100%;
         margin: 0 auto;
       }
 
       .product-item {
-        display: flex;
-        align-items: center;
-        padding: 20px;
         border-bottom: 1px solid #eee;
-      }
-
-      .product-image {
-        flex: 1;
-        max-width: 150px;
-        margin-right: 20px;
+        padding: 20px;
       }
 
       .product-image img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 8px;
-      }
-
-      .product-details {
-        flex: 2;
+        width: 150px; /* Fixed width */
+        height: 150px; /* Fixed height */
+        object-fit: cover; /* Maintain aspect ratio and cover the area */
+        border-radius: 8px; /* Rounded corners */
       }
 
       .product-name {
@@ -41,15 +28,7 @@
       }
 
       .product-rating {
-        display: flex;
-        align-items: center;
         margin-bottom: 10px;
-      }
-
-      .product-rating img {
-        width: 20px;
-        height: 20px;
-        margin-right: 3px;
       }
 
       .product-price {
@@ -57,64 +36,103 @@
         color: #333;
         margin-bottom: 10px;
       }
+
+      /* Add inline styles for table elements */
+      .product-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .product-image-cell {
+        width: 150px;
+        padding-right: 20px;
+      }
+
+      .product-details-cell {
+        width: 100%;
+      }
+
+      .star {
+        width: 20px;
+        height: 20px;
+        margin-right: 3px;
+        display: inline-block;
+      }
+
+      /* Greeting and Footer Styles */
+      .greeting {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 30px;
+        padding: 20px 0;
+        background-color: #f4f4f4;
+      }
+
+      .footer-button {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .footer-button:hover {
+        background-color: #218838;
+      }
     </style>
   </head>
   <body>
+    <!-- Greeting -->
+    <div class="greeting">
+      Hello, {{userName}}! Checkout these new arrival products this week !
+    </div>
+
     <div class="product-container">
       {{#each products}}
       <div class="product-item">
-        <div class="product-image">
-          <img src="{{this.colors.[0].image.[0]}}" alt="{{this.name}}" />
-        </div>
-        <div class="product-details">
-          <div class="product-name">{{this.name}}</div>
-          <div class="product-rating">
-            {{#each (calculateAverageRating this.reviews)}}
-            <img
-              src="{{this}}"
-              alt="Star"
-            />
-            {{/each}}
-            <span>{{calculateRating this.reviews}}/5</span>
-          </div>
-          <div class="product-price">{{this.price}}$</div>
-        </div>
+        <table class="product-table">
+          <tr>
+            <td class="product-image-cell">
+              <div class="product-image">
+                <img src="{{imageUrl this.firstImage}}" alt="{{this.name}}" />
+              </div>
+            </td>
+            <td class="product-details-cell">
+              <div class="product-name">{{this.name}}</div>
+              <div class="product-rating">
+                {{!-- Loop to show full stars based on avgRating --}}
+                {{#each (fullStars this.avgRating)}}
+                <img class="star" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Plain_Yellow_Star.png/1200px-Plain_Yellow_Star.png" alt="Star" />
+                {{/each}}
+
+                {{!-- Show half star if applicable --}}
+                {{#if (isHalfStar this.avgRating)}}
+                <img class="star" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Star_half_icon.svg/1024px-Star_half_icon.svg.png" alt="Half Star" />
+                {{/if}}
+
+                <span>{{this.avgRating}}/5</span>
+              </div>
+              <div class="product-price">{{this.price}}$</div>
+            </td>
+          </tr>
+        </table>
       </div>
       {{/each}}
     </div>
-    <script>
-      // Handlebars helper to create an array of stars based on the average rating
-      Handlebars.registerHelper('calculateAverageRating', function(reviews) {
-        const fullStar = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Plain_Yellow_Star.png/1200px-Plain_Yellow_Star.png";
-        const halfStar = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Star_half_icon.svg/1024px-Star_half_icon.svg.png";
-        const starArray = [];
-        const rating = calculateRating(reviews);
-        
-        // Add full stars
-        for (let i = 0; i < Math.floor(rating); i++) {
-          starArray.push(fullStar);
-        }
 
-        // Add half star if rating has a decimal part
-        if (rating % 1 !== 0) {
-          starArray.push(halfStar);
-        }
-
-        // Add empty stars to complete 5 stars
-        const remainingStars = 5 - starArray.length;
-        for (let i = 0; i < remainingStars; i++) {
-          starArray.push(fullStar);  // Change this to empty star URL if needed
-        }
-
-        return starArray;
-      });
-
-      // Helper to calculate average rating from reviews
-      Handlebars.registerHelper('calculateRating', function(reviews) {
-        if (!reviews || reviews.length === 0) return 0;
-        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-        return (totalRating / reviews.length).toFixed(1);
-      });
-    </script>
+    <!-- Footer -->
+    <div class="footer">
+      <a href="https://www.google.com/" class="footer-button">
+        Visit Oasis
+      </a>
+    </div>
   </body>
 </html>

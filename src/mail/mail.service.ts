@@ -33,30 +33,38 @@ export class MailService {
     async sendEmailToSubscriber() {
         const newProduct = await this.productsService.findAll(1, 5, `sort=-createdAt`);
         const subscribers = await this.subscribersService.findAllWithoutPaginate();
-        console.log(newProduct)
-        // for (const subs in subscribers) {
-        //     const user = subscribers[subs]
-        //     await this.mailerService
-        //         .sendMail({
-        //             to: user.email, // list of receivers
-        //             from: 'noreply@nestjs.com', // sender address
-        //             subject: 'Verify your email', // Subject line
-        //             template: 'Subscriber',
-        //             context: {
-        //                 products: newProduct.result
-        //             } // HTML body content
-        //         })
-        // }
-        return await this.mailerService
-            .sendMail({
-                to: subscribers[0].email, // list of receivers
-                from: 'noreply@nestjs.com', // sender address
-                subject: 'New product arrivals', // Subject line
-                template: 'Subscriber',
-                context: {
-                    products: newProduct.result
-                } // HTML body content
-            })
+
+        const calculateAverageRating = (reviews) => {
+            const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+            return totalRating / reviews.length;
+        };
+        const data = newProduct.result.map((item, index) => {
+            const itemObj = item.toObject();
+
+            const avgRating = calculateAverageRating(itemObj.reviews);
+            const firstImage = itemObj.colors[0].image[0];
+            return {
+                ...itemObj,
+                avgRating: avgRating ? avgRating : 5,
+                firstImage
+            }
+        })
+        console.log(data)
+        for (const subs in subscribers) {
+            const user = subscribers[subs]
+            await this.mailerService
+                .sendMail({
+                    to: user.email, // list of receivers
+                    from: 'noreply@nestjs.com', // sender address
+                    subject: 'New arrival products', // Subject line
+                    template: 'Subscriber',
+                    context: {
+                        products: data,
+                        userName: user.email
+                    } // HTML body content
+                })
+        }
+        return 'ok'
     }
 
 }

@@ -8,6 +8,7 @@ import { UsersModule } from 'src/users/users.module';
 import { SubscribersModule } from 'src/subscribers/subscribers.module';
 import { ProductsModule } from 'src/products/products.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { registerHandlebarsHelpers } from './handlebars.helper.function';
 
 
 @Module({
@@ -47,4 +48,9 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
   ]
 })
-export class MailModule { }
+export class MailModule {
+  constructor() {
+    // Register your custom helpers when the module initializes
+    registerHandlebarsHelpers();
+  }
+}
