@@ -31,4 +31,28 @@ export class OrdersController {
     return this.ordersService.finishOrder(id, user);
   }
 
+  @Get('order-history')
+  @ResponseMessage('Get user orders with paginate')
+  getUserOrder(
+    @Query('current') current,
+    @Query('pageSize') pageSize,
+    @Query() qs,
+    @User() user: IUser
+  ) {
+    return this.ordersService.getUserOrderWithPaginate(+current, +pageSize, qs, user._id);
+  }
+
+  @Get('total-price')
+  @ResponseMessage('Get total price of all orders')
+  async totalPrice() {
+    return await this.ordersService.calculateTotalPrice();
+  }
+
+  @Get('total-orders')
+  @ResponseMessage('Get total number of all orders')
+  async totalOrders() {
+    return await this.ordersService.totalOrders();
+  }
+
+
 }

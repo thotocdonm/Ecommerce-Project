@@ -87,6 +87,37 @@ export class OrdersService {
     }
   }
 
+  async getUserOrderWithPaginate(current: number, pageSize: number, qs: string, user: string) {
+
+    const { filter, sort, projection, population } = aqp(qs);
+
+    filter.user = user;
+
+    delete filter.current
+    delete filter.pageSize
+
+    const defaultLimit = +pageSize ? +pageSize : 10
+
+    const totalItems = await this.orderModel.countDocuments(filter)
+    const skip = (current - 1) * defaultLimit
+    const totalPages = Math.ceil(totalItems / defaultLimit);
+
+    return {
+      meta: {
+        current: current,
+        pageSize: pageSize,
+        pages: totalPages,
+        total: totalItems,
+      },
+      result: await this.orderModel.find(filter, '-refreshToken')
+        .skip(skip)
+        .limit(defaultLimit)
+        .sort(sort as any)
+        .select(projection)
+        .populate(population)
+    }
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} order`;
   }
@@ -97,5 +128,25 @@ export class OrdersService {
 
   remove(id: number) {
     return `This action removes a #${id} order`;
+  }
+
+  async calculateTotalPrice(): Promise<number> {
+    const result = await this.orderModel.aggregate([
+      {
+        $match: { status: "DONE", isDeleted: false }, // Filter by userId and non-deleted orders
+      },
+      {
+        $group: {
+          _id: null, // Group all the documents together
+          totalPrice: { $sum: "$price" }, // Sum the 'price' field from all documents
+        },
+      },
+    ]);
+
+    return result.length > 0 ? result[0].totalPrice : 0;
+  }
+
+  totalOrders() {
+    return this.orderModel.countDocuments({ status: "DONE" })
   }
 }
