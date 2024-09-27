@@ -30,7 +30,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: 'https://ecommerce-oasis-fe-nextjs-client.vercel.app',
     credentials: true,
   });
 
