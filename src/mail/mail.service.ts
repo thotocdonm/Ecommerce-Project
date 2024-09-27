@@ -49,7 +49,7 @@ export class MailService {
                 firstImage
             }
         })
-        console.log(data)
+
         for (const subs in subscribers) {
             const user = subscribers[subs]
             await this.mailerService

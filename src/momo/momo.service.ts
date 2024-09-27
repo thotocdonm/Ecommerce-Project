@@ -28,15 +28,15 @@ export class MomoService {
         //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
         var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType;
         //puts raw signature
-        console.log("--------------------RAW SIGNATURE----------------")
-        console.log(rawSignature)
+
+
         //signature
         const crypto = require('crypto');
         var signature = crypto.createHmac('sha256', secretKey)
             .update(rawSignature)
             .digest('hex');
-        console.log("--------------------SIGNATURE----------------")
-        console.log(signature)
+
+
 
         //json object send to MoMo endpoint
         const requestBody = JSON.stringify({
@@ -77,7 +77,7 @@ export class MomoService {
     }
 
     async returnCallback(request: Request) {
-        console.log(request.body)
+
         return request.body
     }
 

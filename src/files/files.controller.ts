@@ -45,7 +45,7 @@ export class FilesController {
     //@ts-ignore
     return fs.unlink(join(__dirname, '..', '..', 'public', 'images', `${request.headers.folder_type}`, `${fileName}`), (err) => {
       if (err) {
-        console.log(err);
+
         return err
       }
     })
